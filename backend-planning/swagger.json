@@ -1,0 +1,840 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "This is the breakdown of the APIs that are included in Capless Backend, called only from the frontend capless website",
+      "version": "1.0.0",
+      "title": "Capless Backend",
+      "termsOfService": "http://capless.ai/#/terms/",
+      "contact": {
+        "email": "caplessteam@gmail.com"
+      },
+      "license": {
+        "name": "Apache 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "host": "capless.ai",
+    "basePath": "/#/",
+    "tags": [
+      {
+        "name": "user",
+        "description": "Create/update/delete user"
+      },
+      {
+        "name": "feed",
+        "description": "Links to the Capless feed",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://capless.ai/#/feed"
+        }
+      },
+      {
+        "name": "user-profile",
+        "description": "Links to the profile of the signed-in user",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://capless.ai/#/user-profile"
+        }
+      },
+      {
+        "name": "company-profile",
+        "description": "Links to the profile of the signed-in company",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://capless.ai/#/company-profile"
+        }
+      },
+      {
+        "name": "messages",
+        "description": "Links to the messages platform for a user's messages",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://capless.ai/#/messages"
+        }
+      },
+      {
+        "name": "settings",
+        "description": "Link to modifying settings for account or company",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://capless.ai/#/settings"
+        }
+      },
+      {
+        "name": "notifications",
+        "description": "Link to the notifications of a user",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://capless.ai/#/notifications"
+        }
+      }
+    ],
+    "schemes": [
+      "https",
+      "http"
+    ],
+    "paths": {
+      "/feed": {
+        "get": {
+          "tags": [
+            "feed"
+          ],
+          "summary": "Get details for a company's recommendations",
+          "description": "",
+          "operationId": "getFeed",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "X-Auth-token",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Feed"
+                }
+              }
+            },
+            "404": {
+              "description": "Content not found"
+            }
+          },
+          "security": [
+            {
+              "capless_auth": [
+                "read:feed"
+              ]
+            }
+          ]
+        }
+      },
+      "/user-profile": {
+        "get": {
+          "tags": [
+            "user-profile"
+          ],
+          "summary": "Loads a users profile",
+          "description": "Grabs details to populate a user's profile",
+          "operationId": "getUserProfile",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "X-curr-session-token",
+              "in": "header",
+              "type": "string",
+              "description": "Current session token, used to retrieve user details",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful response",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/User-Profile-Details"
+                }
+              }
+            },
+            "403": {
+              "description": "Not authorized"
+            },
+            "404": {
+              "description": "Content Not Found"
+            }
+          },
+          "security": [
+            {
+              "capless_auth": [
+                "read:user-profile"
+              ]
+            }
+          ]
+        },
+        "post": {
+          "tags": [
+            "user-profile"
+          ],
+          "summary": "Create user profile",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "createUserProfile",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Created user profile object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User-Profile-Details"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/user-profile/{username}": {
+        "put": {
+          "tags": [
+            "user-profile"
+          ],
+          "summary": "Updated user profile",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "updateUserProfile",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "description": "name that need to be updated",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Updated user profile object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User-Profile-Details"
+              }
+            }
+          ],
+          "responses": {
+            "400": {
+              "description": "Invalid user supplied"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/company-profile": {
+        "get": {
+          "tags": [
+            "company-profile"
+          ],
+          "summary": "Loads a company profile",
+          "description": "Grabs details to populate a company's profile",
+          "operationId": "getCompanyProfile",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "X-curr-session-token",
+              "in": "header",
+              "type": "string",
+              "description": "Current session token, used to retrieve company details",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful response",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Company-Profile-Details"
+                }
+              }
+            },
+            "403": {
+              "description": "Not authorized"
+            },
+            "404": {
+              "description": "Content Not Found"
+            }
+          },
+          "security": [
+            {
+              "capless_auth": [
+                "read:company-profile"
+              ]
+            }
+          ]
+        },
+        "post": {
+          "tags": [
+            "company-profile"
+          ],
+          "summary": "Create company profile",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "createCompanyProfile",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Created company profile object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Company-Profile-Details"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/user": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Create user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "createUser",
+          "produces": [
+            "application/xml",
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Created user object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "responses": {
+            "default": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/user/login": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Logs user into the system",
+          "description": "",
+          "operationId": "loginUser",
+          "produces": [
+            "application/xml",
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "query",
+              "description": "The user name for login",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "password",
+              "in": "query",
+              "description": "The password for login in clear text",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "type": "string"
+              },
+              "headers": {
+                "X-Rate-Limit": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "calls per hour allowed by the user"
+                },
+                "X-Expires-After": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "date in UTC when token expires"
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid username/password supplied"
+            }
+          }
+        }
+      },
+      "/user/logout": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Logs out current logged in user session",
+          "description": "",
+          "operationId": "logoutUser",
+          "produces": [
+            "application/xml",
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "default": {
+              "description": "successful operation"
+            }
+          }
+        }
+      },
+      "/user/{username}": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Get user by user name",
+          "description": "",
+          "operationId": "getUserByName",
+          "produces": [
+            "application/xml",
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "description": "The name that needs to be fetched. Use user1 for testing. ",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            },
+            "400": {
+              "description": "Invalid username supplied"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Updated user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "updateUser",
+          "produces": [
+            "application/xml",
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "description": "name that need to be updated",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Updated user object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "responses": {
+            "400": {
+              "description": "Invalid user supplied"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Delete user",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "deleteUser",
+          "produces": [
+            "application/xml",
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "description": "The name that needs to be deleted",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "400": {
+              "description": "Invalid username supplied"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/settings": {
+        "get": {
+          "tags": [
+            "settings"
+          ],
+          "summary": "Loads a users settings",
+          "description": "Grabs settings for a user",
+          "operationId": "getSettings",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "X-curr-session-token",
+              "in": "header",
+              "type": "string",
+              "description": "Current session token, used to retrieve user details",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful response",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Settings"
+                }
+              }
+            },
+            "403": {
+              "description": "Not authorized"
+            },
+            "404": {
+              "description": "Content Not Found"
+            }
+          },
+          "security": [
+            {
+              "capless_auth": [
+                "read:settings"
+              ]
+            }
+          ]
+        }
+      },
+      "/settings/{username}": {
+        "put": {
+          "tags": [
+            "settings"
+          ],
+          "summary": "Updated user settings",
+          "description": "This can only be done by the logged in user.",
+          "operationId": "updateSettings",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "description": "name that need to be updated",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Updated user settings object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Settings"
+              }
+            }
+          ],
+          "responses": {
+            "400": {
+              "description": "Invalid user supplied"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/notifications": {
+        "get": {
+          "tags": [
+            "notifications"
+          ],
+          "summary": "Get notifications",
+          "description": "",
+          "operationId": "getNotifications",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "X-Auth-token",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Notifications"
+                }
+              }
+            },
+            "404": {
+              "description": "Content not found"
+            }
+          }
+        }
+      }
+    },
+    "securityDefinitions": {
+      "capless_auth": {
+        "type": "oauth2",
+        "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+        "flow": "implicit",
+        "scopes": {
+          "read:feed": "read your feed recommendations",
+          "read:user-profile": "read a user profile",
+          "write:user-profile": "edit a user's profile",
+          "read:company-profile": "read a company profile",
+          "write:company-profile": "edit a company's profile",
+          "read:settings": "read settings for a user",
+          "write:settings": "write settings for a user"
+        }
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
+      }
+    },
+    "definitions": {
+      "Feed": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "company-name": {
+              "type": "string"
+            },
+            "company-logo": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "interested": {
+              "type": "boolean"
+            },
+            "industry": {
+              "type": "string"
+            },
+            "stage": {
+              "type": "string"
+            },
+            "cap-table": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "User-Profile-Details": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "position": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Company-Profile-Details": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "company": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "cap-table": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "userStatus": {
+            "type": "integer",
+            "format": "int32",
+            "description": "User Status"
+          }
+        }
+      },
+      "Settings": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "userStatus": {
+            "type": "integer",
+            "format": "int32",
+            "description": "User Status"
+          }
+        }
+      },
+      "Notifications": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "notification": {
+              "$ref": "#/definitions/Notification"
+            }
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "company-name": {
+            "type": "string"
+          },
+          "company-logo": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Find out more about Swagger",
+      "url": "http://swagger.io"
+    }
+  }
