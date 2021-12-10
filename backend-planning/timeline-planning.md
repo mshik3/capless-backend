@@ -1,4 +1,6 @@
 # Backend Timeline Breakdown
+## Recommendation Service (21 days)
+* TBD
 ## Core Data Service (40 days)
 * User Authentication (7 days)
 * Startup Onboarding (6)
@@ -24,8 +26,6 @@
   * GET messages (1)
   * POST message details (3)
   * DELETE message (2)
-## Recommendation Service (21 days)
-* TBD
 ## Messaging Service (12 days)
 * API setup (GET, POST, DELETE) (2)
 * Data Framework setup (6)
