@@ -16,14 +16,35 @@ This is a deep dive into every portion of the backend infrastructure, including 
 * Need vectors for all VCs / Startups
   * Attributes, how well they've filled out profile, how much they're paying us, profile age, number of times logged in, quality score
 * Match Score: For every VC, scan through every startup. Mount data from DDB into a CSV file in S3 maybe. Compare ranked preference list to list of attributes and compute score. Store symmetric score in (startup, VC) table.
+  * Job to mount DDB into S3 which main algo depends on, keeps cheaper snapshot history in S3
 * Sentement Score: Multiplier we use based on if there has been a like or not. Example: 
   * Like: 2
   * Not like: 1/2
   * No action: 1
+* Time Score: Multiplier we use that changes everyday after an action is taken:
+  * Days since company profile has been viewed
+  * Days since dislike
 * View Score: Number that ranks the feed, aggregate via linear combination
   * Quality
   * Match
   * Sentiment
+* Input data
+  * S3 Buckets: VC, Startup
+  * Single file to capture snapshot for whole day of all attributes and preferences of every company
+* Scoring Job (Daily Lambda)
+  * Quality job -> quality score file in S3
+    * dict{companyA}:score
+    * Extra metadata if we want like per attribute score
+  * Match job -> match score file in S3
+    * dict{companyA,companyB}:score
+* Combining Job
+  * Combine job (view score) -> linear combination of full scores
+  * Parses S3 quality and match score into pandas table
+  * Formula: view_score(companyA,companyB): (Time * Sentement)(Quality + Match)
+  * Store all view_scores in JSON:
+    * {company_id: "company_1:score,company_2:score"}, sorted by score high to low
+* Get Call
+  * Fetches string for company_id, parses out first 10 recs by score, returns list
 
 ### Matches
 * Likes DDB: primary key company_id_1:type, value: company_id_2 where value is who they like
