@@ -14,7 +14,22 @@ This is a deep dive into every portion of the backend infrastructure, including 
 
 ### Recommendations Service
 * Need vectors for all VCs / Startups
-  * Attributes, how well they've filled out profile, how much they're paying us, profile age, number of times logged in, quality score
+  * Attributes
+    * Name
+    * Employees
+    * Location
+    * Industry
+  * Preferences
+    * Location
+    * Industry
+    * Check size
+    * ...
+  * Soft Attributes
+    * How well they've filled out profile
+    * How much they're paying us
+    * Profile age
+    * Number of times logged in
+    * Quality score
 * Match Score: For every VC, scan through every startup. Mount data from DDB into a CSV file in S3 maybe. Compare ranked preference list to list of attributes and compute score. Store symmetric score in (startup, VC) table.
   * Job to mount DDB into S3 which main algo depends on, keeps cheaper snapshot history in S3
 * Sentement Score: Multiplier we use based on if there has been a like or not. Example: 
