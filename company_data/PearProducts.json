@@ -1,0 +1,72 @@
+[
+        {
+            "name": "Venture Standard",
+            "series": "Series A",
+            "industry": "Agritech",
+            "capTable": "85M",
+            "interested": true
+        },
+        {
+            "name": "Sequoia Capital",
+            "series": "Series B",
+            "industry": "Biotech",
+            "capTable": "25M",
+            "interested": false
+        },
+        {
+            "name": "Accel",
+            "series": "Series C",
+            "industry": "Automative",
+            "capTable": "15M",
+            "interested": false
+        },
+        {
+            "name": "Kleiner Perkins",
+            "series": "Series D",
+            "industry": "Consulting",
+            "capTable": "35M",
+            "interested": true
+        },
+        {
+            "name": "Hiya",
+            "series": "Series E",
+            "industry": "Social Media",
+            "capTable": "45M",
+            "interested": false
+        },
+        {
+            "name": "Auth0",
+            "series": "Series F",
+            "industry": "CyberSecurity",
+            "capTable": "35M",
+            "interested": false
+        },
+        {
+            "name": "HOVER",
+            "series": "Series G",
+            "industry": "Drone Tech",
+            "capTable": "65M",
+            "interested": false
+        },
+        {
+            "name": "Wrench",
+            "series": "Series H",
+            "industry": "Manufacturing",
+            "capTable": "105M",
+            "interested": false
+        },
+        {
+            "name": "Unite Us",
+            "series": "Series I",
+            "industry": "Human Resources",
+            "capTable": "5M",
+            "interested": false
+        },
+        {
+            "name": "Shield AI",
+            "series": "Series J",
+            "industry": "CyberSecurity",
+            "capTable": "10M",
+            "interested": false
+        }
+    ]
