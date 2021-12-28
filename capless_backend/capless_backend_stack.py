@@ -15,6 +15,7 @@ class CaplessBackendStack(Stack):
         startup_results_bucket = _s3.Bucket(self, "capless-startup-data", bucket_name="capless-startup-data")
         raw_quality_scores_bucket = _s3.Bucket(self, "capless-raw-quality-scores", bucket_name="capless-raw-quality-scores")
         raw_match_scores_bucket = _s3.Bucket(self, "capless-raw-match-scores", bucket_name="capless-raw-match-scores")
+        recommendation_service_inputs_bucket = _s3.Bucket(self, "capless-recommendation-service-inputs", bucket_name="capless-recommendation-service-inputs")
         
         ########### Lambdas ###########
         get_feed_lambda = _lambda.Function(self,'GetFeedLambda',
@@ -31,12 +32,23 @@ class CaplessBackendStack(Stack):
             code=_lambda.Code.from_asset('resources'),
         )
 
+        recommendation_engine_lambda = _lambda.Function(self,'RecommendationEngineLambda',
+            function_name="RecommendationEngineLambda",
+            handler='RecommendationEngineLambda.lambda_handler',
+            runtime=_lambda.Runtime.PYTHON_3_7,
+            code=_lambda.Code.from_asset('resources'),
+        )
+
         ########### Bucket Permissions ###########
         startup_results_bucket.grant_read(get_feed_lambda)
         startup_results_bucket.grant_write(score_processing_engine_lambda)
 
         raw_quality_scores_bucket.grant_read(score_processing_engine_lambda)
         raw_match_scores_bucket.grant_read(score_processing_engine_lambda)
+        raw_quality_scores_bucket.grant_write(recommendation_engine_lambda)
+        raw_match_scores_bucket.grant_write(recommendation_engine_lambda)
+
+        recommendation_service_inputs_bucket.grant_read(recommendation_engine_lambda)
 
         ########### API Gateway ###########
         api = apigw.LambdaRestApi(self, "GetFeedEndpoint", handler=get_feed_lambda, proxy=False)
