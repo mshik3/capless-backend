@@ -12,7 +12,7 @@ def get_latest_json_content(bucket_name, file_name):
     file_content = content_object.get()['Body'].read().decode('utf-8')
     return json.loads(file_content)
 
-def generate_match_results(quality_scores, match_scores):
+def generate_match_results(quality_scores):
     match_results = {}
 
     for quality_item in quality_scores:
