@@ -1,0 +1,11 @@
+company_name,industry,location,revenue,check_size,fundraising_round,company_age,company_size,incubators
+Venture Standard, Agritech, Chicago, 85M, $, Series A, 12, 5, None
+Sequoia Capital, Biotech, Los Angeles, 25M, $$, Series B, 8, 5, None
+Accel, Automative, New York, 15M, $$$, Series C, 4, 5, None
+Kleiner Perkins, Consulting, St Louis, 35M, $$, Series D, 5, 50, None
+Hiya, Social Media, Seattle, 45M, $$$, Series E, 6, 50, None
+Auth0, CyberSecurity, San Francisco, 35M, $, Series F, 3, 50, 2
+HOVER, Drone Tech, Chicago, 65M, $$$, Series G, 4, 500, 4
+Wrench, Manufacturing, Toronto, 105M, $$$, Series H, 17, 500, 3
+Unite Us, Human Resources, Vancouver, 5M, $$, Series I, 20, 500, 8
+Shield AI, CyberSecurity, Chicago, 10M, $$, Series J, 22, 500, 1
