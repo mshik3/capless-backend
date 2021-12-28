@@ -19,8 +19,8 @@ def generate_match_results(quality_scores, match_scores):
         result_item = {}
         company_name = quality_item["primary_key"]
 
-        # match_score_file_name = company_name + "-" + FILE_NAME
-        # match_scores = get_latest_json_content(RAW_MATCH_SCORES_BUCKET, match_score_file_name)
+        match_score_file_name = company_name + "-" + FILE_NAME
+        match_scores = get_latest_json_content(RAW_MATCH_SCORES_BUCKET, match_score_file_name)
 
         quality_score = quality_item["quality_score"]
 
@@ -55,7 +55,6 @@ def lambda_handler(event, context):
     generated_match_results = generate_match_results(quality_scores)
 
     print(generated_match_results)
-
 
     ### write to S3 folder with these results
 
