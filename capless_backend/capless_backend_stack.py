@@ -32,12 +32,32 @@ class CaplessBackendStack(Stack):
             code=_lambda.Code.from_asset('resources'),
         )
 
-        recommendation_engine_lambda = _lambda.Function(self,'RecommendationEngineLambda',
-            function_name="RecommendationEngineLambda",
-            handler='RecommendationEngineLambda.lambda_handler',
-            runtime=_lambda.Runtime.PYTHON_3_7,
-            code=_lambda.Code.from_asset('resources'),
-        )
+        # ## Lambda Layer for Recommendation Engine Lambda
+
+        # recommendation_engine_lambda_layer = _lambda.LayerVersion(self, 'recommendation-engine-lambda-layer',
+        #           code = _lambda.AssetCode('resources/imports/'),
+        #           compatible_runtimes = [_lambda.Runtime.PYTHON_3_7],
+        # )   
+
+        # recommendation_engine_lambda = _lambda.Function(self,'RecommendationEngineLambda',
+        #     function_name="RecommendationEngineLambda",
+        #     handler='RecommendationEngineLambda.lambda_handler',
+        #     runtime=_lambda.Runtime.PYTHON_3_7,
+        #     layers = [recommendation_engine_lambda_layer],
+        #     code=_lambda.Code.from_asset('resources'),
+        # )
+
+        # recommendation_engine_lambda.addLayers(
+        #     _lambda.LayerVersion.fromLayerVersionArn(self, 'awsNumpyLayer', 'arn:aws:lambda:ap-southeast-2:817496625479:layer:AWSLambda-Python38-SciPy1x:29')
+        # )
+
+        # recommendation_engine_lambda = _lambda.PythonFunction(self,
+        #     "RecommendationEngineLambda",
+        #     entry="resources",
+        #     index="RecommendationEngineLambda.py",
+        #     handler="lambda_handler",
+        #     runtime=_lambda.Runtime.PYTHON_3_7,
+        # )
 
         ########### Bucket Permissions ###########
         startup_results_bucket.grant_read(get_feed_lambda)
