@@ -39,13 +39,13 @@ class CaplessBackendStack(Stack):
         #           compatible_runtimes = [_lambda.Runtime.PYTHON_3_7],
         # )   
 
-        # recommendation_engine_lambda = _lambda.Function(self,'RecommendationEngineLambda',
-        #     function_name="RecommendationEngineLambda",
-        #     handler='RecommendationEngineLambda.lambda_handler',
-        #     runtime=_lambda.Runtime.PYTHON_3_7,
-        #     layers = [recommendation_engine_lambda_layer],
-        #     code=_lambda.Code.from_asset('resources'),
-        # )
+        recommendation_engine_lambda = _lambda.Function(self,'RecommendationEngineLambda',
+            function_name="RecommendationEngineLambda",
+            handler='RecommendationEngineLambda.lambda_handler',
+            runtime=_lambda.Runtime.PYTHON_3_7,
+            # layers = [recommendation_engine_lambda_layer],
+            code=_lambda.Code.from_asset('resources'),
+        )
 
         # recommendation_engine_lambda.addLayers(
         #     _lambda.LayerVersion.fromLayerVersionArn(self, 'awsNumpyLayer', 'arn:aws:lambda:ap-southeast-2:817496625479:layer:AWSLambda-Python38-SciPy1x:29')
