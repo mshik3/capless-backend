@@ -1,10 +1,7 @@
-from aws_cdk import (
-    App,
-    aws_apigateway as apigw,
-    aws_lambda as _lambda,
-    aws_s3 as _s3,
-    Stack
-)
+from aws_cdk import App, Stack
+from aws_cdk import aws_lambda as _lambda
+from aws_cdk import aws_s3 as _s3
+from aws_cdk import aws_apigateway as apigw
 
 class CaplessBackendStack(Stack):
 

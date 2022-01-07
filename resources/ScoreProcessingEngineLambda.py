@@ -5,7 +5,7 @@ import boto3
 s3 = boto3.resource("s3")
 RAW_QUALITY_SCORES_BUCKET = 'capless-raw-quality-scores'
 RAW_MATCH_SCORES_BUCKET = 'capless-raw-match-scores'
-FILE_NAME = "2021-12-27-1640641893.json"
+FILE_NAME = "2022-01-07-1641515194.json"
 
 def get_latest_json_content(bucket_name, file_name):
     content_object = s3.Object(bucket_name, key=file_name)
@@ -35,7 +35,7 @@ def generate_match_results(quality_scores):
             match_result_item["industry"] = match_item["matched_company_info"]["industry"]
             match_result_item["capTable"] = match_item["matched_company_info"]["capTable"]
             match_result_item["interested"] = match_item["matched_company_info"]["interested"]
-            match_result_item["total_score"] = quality_score + match_item["match_score"]
+            match_result_item["total_score"] = str(float(quality_score) + float(match_item["match_score"]))
 
             result_item[company_name].append(match_result_item)
 
@@ -48,13 +48,10 @@ def generate_match_results(quality_scores):
 
 
 def lambda_handler(event, context):   
-    print("ScoreProcessingEngine Lambda")
     
     quality_scores = get_latest_json_content(RAW_QUALITY_SCORES_BUCKET, FILE_NAME)
 
     generated_match_results = generate_match_results(quality_scores)
-
-    print(generated_match_results)
 
     ### write to S3 folder with these results
 
