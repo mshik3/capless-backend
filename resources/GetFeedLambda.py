@@ -4,7 +4,7 @@ import boto3
 
 s3 = boto3.resource("s3")
 S3_BUCKET_NAME = 'capless-startup-data'
-FILE_NAME = 'PearProducts.json'
+FILE_NAME = 'Pear_Products.json'
 
 def lambda_handler(event, context):   
     # response = s3_client.list_objects_v2(Bucket=S3_BUCKET_NAME, Prefix=S3_BUCKET_PREFIX)

@@ -1,0 +1,12 @@
+[
+    {
+        "company_name": "Pear Products",
+        "primary_key": "Pear_Products",
+        "quality_score": 11
+    },
+    {
+        "company_name": "Drone Warriors",
+        "primary_key": "Drone_Warriors",
+        "quality_score": 12
+    }
+]

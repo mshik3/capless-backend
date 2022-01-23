@@ -5,9 +5,14 @@ import boto3
 s3 = boto3.resource("s3")
 RAW_QUALITY_SCORES_BUCKET = 'capless-raw-quality-scores'
 RAW_MATCH_SCORES_BUCKET = 'capless-raw-match-scores'
-FILE_NAME = "2022-01-07-1641515194.json"
 
-def get_latest_json_content(bucket_name, file_name):
+def get_latest_json_content(bucket_name, path):
+    # Fetch filename from latest
+    latest = path + 'latest'
+    content_object = s3.Object(bucket_name, key=latest)
+    file_name = path + content_object.get()['Body'].read().decode('utf-8')
+
+    # Fetch latest file content
     content_object = s3.Object(bucket_name, key=file_name)
     file_content = content_object.get()['Body'].read().decode('utf-8')
     return json.loads(file_content)
@@ -19,8 +24,8 @@ def generate_match_results(quality_scores):
         result_item = {}
         company_name = quality_item["primary_key"]
 
-        match_score_file_name = company_name + "-" + FILE_NAME
-        match_scores = get_latest_json_content(RAW_MATCH_SCORES_BUCKET, match_score_file_name)
+        match_score_path = company_name + "/"
+        match_scores = get_latest_json_content(RAW_MATCH_SCORES_BUCKET, match_score_path)
 
         quality_score = quality_item["quality_score"]
 
@@ -49,7 +54,7 @@ def generate_match_results(quality_scores):
 
 def lambda_handler(event, context):   
     
-    quality_scores = get_latest_json_content(RAW_QUALITY_SCORES_BUCKET, FILE_NAME)
+    quality_scores = get_latest_json_content(RAW_QUALITY_SCORES_BUCKET, '')
 
     generated_match_results = generate_match_results(quality_scores)
 

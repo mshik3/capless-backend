@@ -27,11 +27,12 @@ def calculate_quality_scores(startup_attributes_list):
         total_scores_dict["company_name"] = company_name
         total_scores_dict["primary_key"] = company_name.replace(" ", "_")
         total_scores_dict["quality_score"] = 0
+        num_attributes = len(startup_attributes)
         for key, attribute in startup_attributes.items():
             attribute = attribute.strip()
             if attribute != "None":
                 total_scores_dict["quality_score"] += 1
-
+        total_scores_dict["quality_score"] /= num_attributes
         total_scores_list.append(total_scores_dict)
     return total_scores_list
 
@@ -53,8 +54,8 @@ def compute_match_score(startup, investor, startup_ranks):
 def calculate_match_scores(startup_preference_values, startup_preference_ranks, investors_attributes):
     num_attributes = len(startup_preference_ranks[0]) - 1
     matches = {}
-    match_scores_list = []
     for i, startup in enumerate(startup_preference_values):
+        match_scores_list = []
         for investor in investors_attributes:
             match_scores_dict = {}
             startup_ranks = startup_preference_ranks[i]
@@ -70,7 +71,6 @@ def calculate_match_scores(startup_preference_values, startup_preference_ranks, 
                 "capTable": investor["revenue"].strip(),
                 "interested": True,
             }
-
             match_scores_list.append(match_scores_dict)
         match_scores_list = sorted(match_scores_list, key = lambda x: x["match_score"], reverse = True)
 
@@ -80,24 +80,26 @@ def calculate_match_scores(startup_preference_values, startup_preference_ranks, 
     return matches
 
 def format_and_upload_to_s3(quality_scores, matches):
-    # upload quality score data
+    date_file_name = datetime.datetime.today().strftime('%Y-%m-%d') + "-" + str(int(time.time())) + ".json"
 
-    quality_score_file_name = datetime.datetime.today().strftime('%Y-%m-%d') + "-" + str(int(time.time())) + ".json"
-
+    # Upload quality score data
     file_contents = json.dumps(quality_scores)
-
-    write_object = s3.Object('capless-raw-quality-scores', quality_score_file_name)
+    write_object = s3.Object('capless-raw-quality-scores', date_file_name)
     write_object.put(Body=file_contents)
-
-    # upload match score data
     
+    # Update latest
+    write_object = s3.Object('capless-raw-quality-scores', "latest")
+    write_object.put(Body=date_file_name)
+
+    # Upload match score data
     for company_name, match_data in matches.items():
-        match_score_file_name = company_name + "-" + str(datetime.datetime.today().strftime('%Y-%m-%d')) + "-" + str(int(time.time())) + ".json"
-
         file_contents = json.dumps(match_data)
-
-        write_object = s3.Object('capless-raw-match-scores', match_score_file_name)
+        write_object = s3.Object('capless-raw-match-scores', company_name + "/" + date_file_name)
         write_object.put(Body=file_contents)
+
+        # Update latest
+        write_object = s3.Object('capless-raw-match-scores', company_name + "/latest")
+        write_object.put(Body=date_file_name)
 
 
 def lambda_handler(event, context):

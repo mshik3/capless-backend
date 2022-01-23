@@ -1,2 +1,3 @@
 company_name,industry,location,revenue,check_size,fundraising_round,company_age,company_size,incubators,is_sustainable,last_login,subscription_tier
 Pear Products, Technology, Chicago, 45M, $$$, Series A, 12, 50, None, True, 2021-12-31T00:00, Tier_1
+Drone Warriors, Drone Tech, Chicago, 45M, $$$, Series G, 12, 50, 4, True, 2021-12-31T00:00, Tier_2
