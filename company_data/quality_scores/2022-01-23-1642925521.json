@@ -2,11 +2,11 @@
     {
         "company_name": "Pear Products",
         "primary_key": "Pear_Products",
-        "quality_score": 11
+        "quality_score": 0.9166666666666666
     },
     {
         "company_name": "Drone Warriors",
         "primary_key": "Drone_Warriors",
-        "quality_score": 12
+        "quality_score": 1.0
     }
 ]
