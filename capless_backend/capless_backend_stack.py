@@ -15,12 +15,15 @@ class CaplessBackendStack(Stack):
 
         ########### Buckets ###########
         startup_results_bucket = _s3.Bucket(self, "capless-startup-data", bucket_name="capless-startup-data")
+        capless_app_data_bucket = _s3.Bucket(self, "capless-app-data", bucket_name="capless-app-data")
         raw_quality_scores_bucket = _s3.Bucket(self, "capless-raw-quality-scores", bucket_name="capless-raw-quality-scores")
         raw_match_scores_bucket = _s3.Bucket(self, "capless-raw-match-scores", bucket_name="capless-raw-match-scores")
         recommendation_service_inputs_bucket = _s3.Bucket(self, "capless-recommendation-service-inputs", bucket_name="capless-recommendation-service-inputs")
         
         ########### Lambdas ###########
         get_feed_lambda = self.create_lambda("GetFeedLambda")
+
+        sheets_api_lambda = self.create_lambda("GetSheetsAPILambda")
 
         score_processing_engine_lambda = self.create_lambda("ScoreProcessingEngineLambda", layers=True)
 
@@ -31,6 +34,7 @@ class CaplessBackendStack(Stack):
         ########### Bucket Permissions ###########
         startup_results_bucket.grant_read(get_feed_lambda)
         startup_results_bucket.grant_write(score_processing_engine_lambda)
+        capless_app_data_bucket.grant_read(sheets_api_lambda)
 
         raw_quality_scores_bucket.grant_read(score_processing_engine_lambda)
         raw_match_scores_bucket.grant_read(score_processing_engine_lambda)
@@ -57,6 +61,10 @@ class CaplessBackendStack(Stack):
 
         item = items.add_resource("{feed_item}")
         item.add_method("GET") # Gets a companies details from the feed /feed/{company_name}
+
+        sheets_api = apigw.LambdaRestApi(self, "SheetsAPIEndpoint", handler=sheets_api_lambda, proxy=False)
+        sheets = sheets_api.root.add_resource("sheets")
+        sheets.add_method("GET") # Creating a new user
 
         user_api = apigw.LambdaRestApi(self, "UserEndpoint", handler=user_lambda, proxy=False)
         user = user_api.root.add_resource("user")
