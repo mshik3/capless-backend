@@ -3,6 +3,7 @@ from aws_cdk import aws_lambda as _lambda
 from aws_cdk import aws_s3 as _s3
 from aws_cdk import aws_apigateway as apigw
 from aws_cdk import aws_lambda_python_alpha as lambda_python
+from aws_cdk import aws_dynamodb as dynamo
 
 LAMBDA_HANDLER_NAME = 'lambda_handler'
 LAMBDA_CODE_FOLDER = 'resources'
@@ -25,6 +26,8 @@ class CaplessBackendStack(Stack):
 
         recommendation_engine_lambda = self.create_lambda("RecommendationEngineLambda", layers=True)
 
+        user_lambda = self.create_lambda("UserLambda", layers=True)
+
         ########### Bucket Permissions ###########
         startup_results_bucket.grant_read(get_feed_lambda)
         startup_results_bucket.grant_write(score_processing_engine_lambda)
@@ -36,13 +39,29 @@ class CaplessBackendStack(Stack):
 
         recommendation_service_inputs_bucket.grant_read(recommendation_engine_lambda)
 
+        ########### DynamoDB ###########
+
+        user_table = dynamo.Table(self, "UserInfo",
+            table_name="UserInfo",
+            partition_key=dynamo.Attribute(name="username", type=dynamo.AttributeType.STRING),   
+        )
+
+        ########### DynamoDB Permissions ###########
+
+        user_table.grant_read_write_data(user_lambda)
+
         ########### API Gateway ###########
-        api = apigw.LambdaRestApi(self, "GetFeedEndpoint", handler=get_feed_lambda, proxy=False)
-        items = api.root.add_resource("feed")
+        get_feed_api = apigw.LambdaRestApi(self, "GetFeedEndpoint", handler=get_feed_lambda, proxy=False)
+        items = get_feed_api.root.add_resource("feed")
         items.add_method("GET") # Gets the entire feed /feed
 
         item = items.add_resource("{feed_item}")
         item.add_method("GET") # Gets a companies details from the feed /feed/{company_name}
+
+        user_api = apigw.LambdaRestApi(self, "UserEndpoint", handler=user_lambda, proxy=False)
+        user = user_api.root.add_resource("user")
+        user.add_method("POST") # Creating a new user
+        user.add_method("PUT") # Updating that user
 
 
     def create_layer(self, lambda_name, entry: str) -> lambda_python.PythonLayerVersion:
