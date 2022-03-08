@@ -68,8 +68,7 @@ class CaplessBackendStack(Stack):
 
         user_api = apigw.LambdaRestApi(self, "UserEndpoint", handler=user_lambda, proxy=False)
         user = user_api.root.add_resource("user")
-        user.add_method("POST") # Creating a new user
-        user.add_method("PUT") # Updating that user
+        user.add_method("PUT") #Creating/Updating a user
 
 
     def create_layer(self, lambda_name, entry: str) -> lambda_python.PythonLayerVersion:

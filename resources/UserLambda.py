@@ -30,7 +30,7 @@ def lambda_handler(event, context):
         'headers': {
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': "POST, PUT"
+            'Access-Control-Allow-Methods': "PUT"
         },
         'body': "something"
     }
