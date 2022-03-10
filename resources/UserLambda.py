@@ -30,7 +30,7 @@ def lambda_handler(event, context):
         'headers': {
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': "PUT"
+            'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS'
         },
-        'body': "something"
+        'body': json.dumps("success")
     }
