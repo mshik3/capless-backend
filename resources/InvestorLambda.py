@@ -19,23 +19,23 @@ def lambda_handler(event, context):
         if body is None:
             body = ""
 
-        table = dynamodb.Table("InvestorInfo")
+        table = dynamodb.Table("CompanyInfo")
         response = table.put_item(
             Item={
                 "company_email": body["company_email"],
-                "location": body["location"],
-                "zip_code": body["zip_code"],
-                "company_name": body["company_name"],
-                "linkedIn_link": body["linkedIn_link"],
-                "venture_experience": body["venture_experience"],
-                "investment_region": body["investment_region"],
-                "investment_check_size": body["investment_check_size"],
-                "referral": body["referral"],
-                "industries": body["industries"],
-                "investment_demographic": body["investment_demographic"],
-                "investment_description": body["investment_description"],
-                "admins": body["admins"],
-                "employees": body["employees"],
+                "location": body.get("location"),
+                "zip_code": body.get("zip_code"),
+                "company_name": body.get("company_name"),
+                "linkedIn_link": body.get("linkedIn_link"),
+                "venture_experience": body.get("venture_experience"),
+                "investment_region": body.get("investment_region"),
+                "investment_check_size": body.get("investment_check_size"),
+                "referral": body.get("referral"),
+                "industries": body.get("industries"),
+                "investment_demographic": body.get("investment_demographic"),
+                "investment_description": body.get("investment_description"),
+                "admins": body.get("admins"),
+                "employees": body.get("employees"),
             }
         )
 
