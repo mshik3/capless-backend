@@ -47,6 +47,10 @@ class CaplessBackendStack(Stack):
 
         user_lambda = self.create_lambda("UserLambda", layers=True)
 
+        investor_lambda = self.create_lambda("InvestorLambda", layers=True)
+        
+        startup_lambda = self.create_lambda("StartupLambda", layers=True)
+
         ########### Bucket Permissions ###########
         startup_results_bucket.grant_read(get_feed_lambda)
         startup_results_bucket.grant_write(score_processing_engine_lambda)
@@ -70,9 +74,21 @@ class CaplessBackendStack(Stack):
             ),
         )
 
+        company_table = dynamo.Table(
+            self,
+            "CompanyInfo",
+            table_name="CompanyInfo",
+            partition_key=dynamo.Attribute(
+                name="company_email", type=dynamo.AttributeType.STRING
+            ),
+        )
+
         ########### DynamoDB Permissions ###########
 
         user_table.grant_read_write_data(user_lambda)
+
+        company_table.grant_read_write_data(investor_lambda)
+        company_table.grant_read_write_data(startup_lambda)
 
         ########### API Gateway ###########
         get_feed_api = apigw.LambdaRestApi(
@@ -95,7 +111,7 @@ class CaplessBackendStack(Stack):
         user_api = apigw.LambdaRestApi(
             self,
             "UserEndpoint",
-            rest_api_name="CreateUser",
+            rest_api_name="UserEndpoint",
             handler=user_lambda,
             default_cors_preflight_options=apigw.CorsOptions(
                 allow_origins=apigw.Cors.ALL_ORIGINS,
@@ -145,6 +161,114 @@ class CaplessBackendStack(Stack):
                     },
                 ),
             ],)  # Get a User
+        
+        investor_api = apigw.LambdaRestApi(
+            self,
+            "InvestorEndpoint",
+            rest_api_name="InvestorEndpoint",
+            handler=investor_lambda,
+            default_cors_preflight_options=apigw.CorsOptions(
+                allow_origins=apigw.Cors.ALL_ORIGINS,
+                allow_methods=apigw.Cors.ALL_METHODS,
+                allow_headers=["*"],
+            ),
+        )
+        investor = investor_api.root.add_resource("investor")
+        investor.add_method(
+            "PUT",
+            method_responses=[
+                apigw.MethodResponse(
+                    # Successful response from the integration
+                    status_code="200",
+                    # Define what parameters are allowed or not
+                    response_parameters={
+                        "method.response.header._content-_type": True,
+                        "method.response.header._access-_control-_allow-_origin": True,
+                    },
+                ),
+                apigw.MethodResponse(
+                    # Same thing for the error responses
+                    status_code="400",
+                    response_parameters={
+                        "method.response.header._content-_type": True,
+                        "method.response.header._access-_control-_allow-_origin": True,
+                    },
+                ),
+            ],
+        )  # Creating/Updating a investor
+        investor.add_method("GET", method_responses=[
+                apigw.MethodResponse(
+                    # Successful response from the integration
+                    status_code="200",
+                    # Define what parameters are allowed or not
+                    response_parameters={
+                        "method.response.header._content-_type": True,
+                        "method.response.header._access-_control-_allow-_origin": True,
+                    },
+                ),
+                apigw.MethodResponse(
+                    # Same thing for the error responses
+                    status_code="400",
+                    response_parameters={
+                        "method.response.header._content-_type": True,
+                        "method.response.header._access-_control-_allow-_origin": True,
+                    },
+                ),
+            ],)  # Get a investor
+
+        startup_api = apigw.LambdaRestApi(
+            self,
+            "StartupEndpoint",
+            rest_api_name="StartupEndpoint",
+            handler=startup_lambda,
+            default_cors_preflight_options=apigw.CorsOptions(
+                allow_origins=apigw.Cors.ALL_ORIGINS,
+                allow_methods=apigw.Cors.ALL_METHODS,
+                allow_headers=["*"],
+            ),
+        )
+        startup = startup_api.root.add_resource("startup")
+        startup.add_method(
+            "PUT",
+            method_responses=[
+                apigw.MethodResponse(
+                    # Successful response from the integration
+                    status_code="200",
+                    # Define what parameters are allowed or not
+                    response_parameters={
+                        "method.response.header._content-_type": True,
+                        "method.response.header._access-_control-_allow-_origin": True,
+                    },
+                ),
+                apigw.MethodResponse(
+                    # Same thing for the error responses
+                    status_code="400",
+                    response_parameters={
+                        "method.response.header._content-_type": True,
+                        "method.response.header._access-_control-_allow-_origin": True,
+                    },
+                ),
+            ],
+        )  # Creating/Updating a startup
+        startup.add_method("GET", method_responses=[
+                apigw.MethodResponse(
+                    # Successful response from the integration
+                    status_code="200",
+                    # Define what parameters are allowed or not
+                    response_parameters={
+                        "method.response.header._content-_type": True,
+                        "method.response.header._access-_control-_allow-_origin": True,
+                    },
+                ),
+                apigw.MethodResponse(
+                    # Same thing for the error responses
+                    status_code="400",
+                    response_parameters={
+                        "method.response.header._content-_type": True,
+                        "method.response.header._access-_control-_allow-_origin": True,
+                    },
+                ),
+            ],)  # Get a startup
 
     def create_layer(self, lambda_name, entry: str) -> lambda_python.PythonLayerVersion:
         return lambda_python.PythonLayerVersion(

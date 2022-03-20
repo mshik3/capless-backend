@@ -19,13 +19,23 @@ def lambda_handler(event, context):
         if body is None:
             body = ""
 
-        table = dynamodb.Table("UserInfo")
+        table = dynamodb.Table("InvestorInfo")
         response = table.put_item(
             Item={
-                "username": body["username"],
-                "type": body["startup_or_investor"],
-                "firstname": body["firstname"],
-                "lastname": body["lastname"],
+                "company_email": body["company_email"],
+                "location": body["location"],
+                "zip_code": body["zip_code"],
+                "company_name": body["company_name"],
+                "linkedIn_link": body["linkedIn_link"],
+                "venture_experience": body["venture_experience"],
+                "investment_region": body["investment_region"],
+                "investment_check_size": body["investment_check_size"],
+                "referral": body["referral"],
+                "industries": body["industries"],
+                "investment_demographic": body["investment_demographic"],
+                "investment_description": body["investment_description"],
+                "admins": body["admins"],
+                "employees": body["employees"],
             }
         )
 
