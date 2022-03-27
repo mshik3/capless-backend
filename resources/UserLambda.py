@@ -24,8 +24,8 @@ def lambda_handler(event, context):
             Item={
                 "username": body["username"],
                 "type": body["startup_or_investor"],
-                "firstname": body["firstname"],
-                "lastname": body["lastname"],
+                "firstname": body.get("firstname"),
+                "lastname": body.get("lastname"),
             }
         )
 
