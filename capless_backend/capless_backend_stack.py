@@ -86,6 +86,7 @@ class CaplessBackendStack(Stack):
         ########### DynamoDB Permissions ###########
 
         user_table.grant_read_write_data(user_lambda)
+        user_table.grant_write_data(investor_lambda)
 
         company_table.grant_read_write_data(investor_lambda)
         company_table.grant_read_write_data(startup_lambda)
