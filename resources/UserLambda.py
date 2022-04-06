@@ -22,6 +22,7 @@ def lambda_handler(event, context):
         table = dynamodb.Table("UserInfo")
         response = table.put_item(
             Item={
+                "user_id": body["user_id"],
                 "username": body["username"],
                 "type": body["startup_or_investor"],
                 "firstname": body.get("firstname"),

@@ -70,7 +70,7 @@ class CaplessBackendStack(Stack):
             "UserInfo",
             table_name="UserInfo",
             partition_key=dynamo.Attribute(
-                name="username", type=dynamo.AttributeType.STRING
+                name="user_id", type=dynamo.AttributeType.STRING
             ),
         )
 
