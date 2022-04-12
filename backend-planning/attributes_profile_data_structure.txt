@@ -84,6 +84,7 @@ UserProfile (S3):
 6. title: "CEO & Co-Founder of Pear Products"
 7. location: "Chicago, Illinois"
 8. industry: "Agritech"
+9. about: "I have over 15 years of experience working in data science. Currently, I work as Asana’s Senior Data Manager, improving products and services for our customers by using advanced analytics, standing up big-data analytical tools, creating and maintaining models, and onboarding compelling new data sets. I have over 15 years of experience working in data science."
 
 
 S3 Structure:
