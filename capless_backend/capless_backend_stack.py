@@ -14,6 +14,12 @@ class CaplessBackendStack(Stack):
         super().__init__(scope, id, **kwargs)
 
         ########### Buckets ###########
+        company_profiles_bucket = _s3.Bucket(
+            self, "capless-company-profiles", bucket_name="capless-company-profiles"
+        )
+        user_profiles_bucket = _s3.Bucket(
+            self, "capless-user-profiles", bucket_name="capless-user-profiles"
+        )
         startup_results_bucket = _s3.Bucket(
             self, "capless-startup-data", bucket_name="capless-startup-data"
         )
@@ -63,6 +69,10 @@ class CaplessBackendStack(Stack):
 
         recommendation_service_inputs_bucket.grant_read(recommendation_engine_lambda)
 
+        company_profiles_bucket.grant_read_write(investor_lambda)
+        company_profiles_bucket.grant_read_write(startup_lambda)
+        user_profiles_bucket.grant_read_write(user_lambda)
+
         ########### DynamoDB ###########
 
         user_table = dynamo.Table(
@@ -83,6 +93,24 @@ class CaplessBackendStack(Stack):
             ),
         )
 
+        investor_table = dynamo.Table(
+            self,
+            "InvestorInfo",
+            table_name="InvestorInfo",
+            partition_key=dynamo.Attribute(
+                name="company_id", type=dynamo.AttributeType.STRING
+            ),
+        )
+
+        startup_table = dynamo.Table(
+            self,
+            "StartupInfo",
+            table_name="StartupInfo",
+            partition_key=dynamo.Attribute(
+                name="company_id", type=dynamo.AttributeType.STRING
+            ),
+        )
+
         ########### DynamoDB Permissions ###########
 
         user_table.grant_read_write_data(user_lambda)
@@ -90,6 +118,9 @@ class CaplessBackendStack(Stack):
 
         company_table.grant_read_write_data(investor_lambda)
         company_table.grant_read_write_data(startup_lambda)
+
+        investor_table.grant_read_write_data(investor_lambda)
+        startup_table.grant_read_write_data(startup_lambda)
 
         ########### API Gateway ###########
         get_feed_api = apigw.LambdaRestApi(
