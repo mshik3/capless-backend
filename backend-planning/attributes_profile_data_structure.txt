@@ -1,19 +1,4 @@
-Startup attributes (ddb):
-1. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
-2. name: "Pear Products"
-3. type: "startup"
-4. industry: "Agritech"
-5. city: "Chicago"
-6. region: "Midwest"
-7. revenue: 100,000
-8. check_size: 10,000
-9. fundraising_round: "pre-seed"
-10. company_age: "3-5 years"
-11. company_size: "<100"
-12. incubators: ["YC", "P10X"]
-13. demographic: ["female", "hispanic_latinx"]
-
-Startup profile (S3):
+StartupInfo (ddb):
 1. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
 2. name: "Pear Products"
 3. type: "startup"
@@ -32,24 +17,8 @@ Startup profile (S3):
 16. twitter_id: "pearproducts"
 17. employees: ["b0262881-5260-4310-b1e1-c62a7f7d61fd", "2782e01b-a35c-4cb6-9b66-c61195c3d215"]
 18. admins: ["2782e01b-a35c-4cb6-9b66-c61195c3d215"]
-Also in S3 folder: company logo image, maybe employee photos, pitch deck, other docs
 
-Investor attributes (ddb):
-1. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
-2. name: "Venture Standard"
-3. type: "investor"
-4. industry: ["Saas", "Agritech"]
-5. city: ["Chicago", "Detroit", "Boston"]
-6. region: ["Midwest", "East Coast"]
-7. revenue: [100,000, 1,000,000]
-8. check_size: [10,000, 100,000]
-9. fundraising_round: ["pre-seed", "seed"]
-10. company_age: ["<1 year", "3-5 years"]
-11. company_size: "<100"
-12. incubators: ["YC", "P10X"]
-13. demographic: ["female", "hispanic_latinx"]
-
-Investor profile (S3):
+InvestorInfo (ddb):
 1. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
 2. name: "Venture Standard"
 3. type: "investor"
@@ -70,39 +39,50 @@ Investor profile (S3):
 18. admins: ["2782e01b-a35c-4cb6-9b66-c61195c3d215"] (user_ids)
 19. portfolios_on_platform: ["2bab4f15-8ba4-4747-974e-6f350d561476", "35e2fad4-9c01-4349-bc4a-3807342fc000"] (company_ids)
 20. portfolios_off_platform: ["Shield AI", "Pear Products", "Auth0"]
-Also in S3 folder: company logo image, maybe employee photos, other docs
 
-UserInfo (ddb): -> also may be able to use cognito
+Preferences (ddb):
+1. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
+2. type: "investor"
+3. industry: ["Saas", "Agritech"]
+4. city: ["Chicago", "Detroit", "Boston"]
+5. region: ["Midwest", "East Coast"]
+6. revenue: [100,000, 1,000,000]
+7. check_size: [10,000, 100,000]
+8. fundraising_round: ["pre-seed", "seed"]
+9. company_age: ["<1 year", "3-5 years"]
+10. company_size: "<100"
+11. incubators: ["YC", "P10X"]
+12. demographic: ["female", "hispanic_latinx"]
+
+
+Cognito
 1. user_id: "d30c1108-eb23-45ba-b24e-7dce138ab69d"
-2. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
+2. email: "paul.nelson@pearproducts.com"
+3. type: "startup"
+
+UserInfo (ddb):
+1. user_id: "d30c1108-eb23-45ba-b24e-7dce138ab69d"
+2. email: "paul.nelson@pearproducts.com"
 3. first_name: "Paul"
 4. last_name" "Nelson"
-5. type: "startup"
-
-UserProfile (S3):
-1. user_id: "d30c1108-eb23-45ba-b24e-7dce138ab69d"
-2. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
-3. first_name: "Paul"
-4. last_name" "Nelson"
-5. type: "startup"
-6. title: "CEO & Co-Founder of Pear Products"
-7. location: "Chicago, Illinois"
-8. industry: "Agritech"
-9. about: "I have over 15 years of experience working in data science. Currently, I work as Asana’s Senior Data Manager, improving products and services for our customers by using advanced analytics, standing up big-data analytical tools, creating and maintaining models, and onboarding compelling new data sets. I have over 15 years of experience working in data science."
+5. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
+6. type: "startup"
+7. title: "CEO & Co-Founder of Pear Products"
+8. location: "Chicago, Illinois"
+9. industry: "Agritech"
+10. about: "I have over 15 years of experience working in data science. Currently, I work as Asana’s Senior Data Manager, improving products and services for our customers by using advanced analytics, standing up big-data analytical tools, creating and maintaining models, and onboarding compelling new data sets. I have over 15 years of experience working in data science."
 
 
 S3 Structure:
-bucket: company-profiles (will contain both startup and investor)
+bucket: capless-company-profiles (will contain both startup and investor)
     folder: company_id:
-        JSON/txt file: startup / investor profile (from above)
         image: company_logo
         folder: docs:
             pitch_deck
             files...
     
-bucket: user-info
+bucket: capless-user-profiles
     folder: user_id:
         image: user profile image
-        JSON/txt file: user profile (from above)
-        files...
-
+        folder: docs:
+            files...
