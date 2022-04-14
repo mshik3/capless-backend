@@ -1,7 +1,7 @@
 StartupInfo (ddb):
 1. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
 2. name: "Pear Products"
-3. type: "startup"
+3. startup_or_investor: "startup"
 4. industry: "Agritech"
 5. city: "Chicago"
 6. region: "Midwest"
@@ -21,7 +21,7 @@ StartupInfo (ddb):
 InvestorInfo (ddb):
 1. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
 2. name: "Venture Standard"
-3. type: "investor"
+3. startup_or_investor: "investor"
 4. industry: ["Saas", "Agritech"]
 5. city: ["Chicago", "Detroit", "Boston"]
 6. region: ["Midwest", "East Coast"]
@@ -42,7 +42,7 @@ InvestorInfo (ddb):
 
 Preferences (ddb):
 1. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
-2. type: "investor"
+2. startup_or_investor: "investor"
 3. industry: ["Saas", "Agritech"]
 4. city: ["Chicago", "Detroit", "Boston"]
 5. region: ["Midwest", "East Coast"]
@@ -58,7 +58,7 @@ Preferences (ddb):
 Cognito
 1. user_id: "d30c1108-eb23-45ba-b24e-7dce138ab69d"
 2. email: "paul.nelson@pearproducts.com"
-3. type: "startup"
+3. startup_or_investor: "startup"
 
 UserInfo (ddb):
 1. user_id: "d30c1108-eb23-45ba-b24e-7dce138ab69d"
@@ -66,7 +66,7 @@ UserInfo (ddb):
 3. first_name: "Paul"
 4. last_name" "Nelson"
 5. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"
-6. type: "startup"
+6. startup_or_investor: "startup"
 7. title: "CEO & Co-Founder of Pear Products"
 8. location: "Chicago, Illinois"
 9. industry: "Agritech"
