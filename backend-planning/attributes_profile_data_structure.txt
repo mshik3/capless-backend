@@ -62,7 +62,7 @@ Cognito
 
 UserInfo (ddb):
 1. user_id: "d30c1108-eb23-45ba-b24e-7dce138ab69d"
-2. email: "paul.nelson@pearproducts.com"
+2. user_email: "paul.nelson@pearproducts.com"
 3. first_name: "Paul"
 4. last_name" "Nelson"
 5. company_id: "b0262881-5260-4310-b1e1-c62a7f7d61fd"

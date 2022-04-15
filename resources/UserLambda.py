@@ -23,10 +23,11 @@ def lambda_handler(event, context):
         response = table.put_item(
             Item={
                 "user_id": body["user_id"],
-                "username": body["username"],
-                "type": body["startup_or_investor"],
+                "user_email": body["user_email"],
                 "firstname": body.get("firstname"),
                 "lastname": body.get("lastname"),
+                "company_id": body.get("company_id"),
+                "startup_or_investor": body["startup_or_investor"],
             }
         )
 
