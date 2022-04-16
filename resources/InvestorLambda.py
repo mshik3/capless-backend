@@ -22,6 +22,7 @@ def lambda_handler(event, context):
         table = dynamodb.Table("CompanyInfo")
         response = table.put_item(
             Item={
+                "company_id": body["company_id"],
                 "company_email": body["company_email"],
                 "location": body.get("location"),
                 "zip_code": body.get("zip_code"),
@@ -35,20 +36,8 @@ def lambda_handler(event, context):
                 "investment_demographic": body.get("investment_demographic"),
                 "investment_description": body.get("investment_description"),
                 "admins": body.get("admins"),
-                "employees": [body.get("username")],
+                "employees": [body.get("user_id")],
             }
-        )
-
-        user_table = dynamodb.Table("UserInfo")
-        user_response = user_table.update_item(
-                Key={
-                    "username": body.get("username"),
-                },
-                UpdateExpression="set company_name=:c",
-                ExpressionAttributeValues={
-                    ":c": body.get("company_name")
-                },
-                ReturnValues="UPDATED_NEW"
         )
 
         print(response)
