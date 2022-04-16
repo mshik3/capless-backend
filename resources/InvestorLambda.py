@@ -19,7 +19,7 @@ def lambda_handler(event, context):
         if body is None:
             body = ""
 
-        table = dynamodb.Table("CompanyInfo")
+        table = dynamodb.Table("InvestorInfo")
         response = table.put_item(
             Item={
                 "company_id": body["company_id"],
